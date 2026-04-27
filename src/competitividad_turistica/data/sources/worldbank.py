@@ -1,12 +1,12 @@
 """World Bank data source for CPI fallback."""
 
 import logging
+
 import pandas as pd
 import wbgapi as wb
-from datetime import datetime
 
-from ..models import DataResult
 from ..cache import cache_key, load_from_cache, save_to_cache
+from ..models import DataResult
 
 logger = logging.getLogger(__name__)
 

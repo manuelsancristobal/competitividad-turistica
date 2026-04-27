@@ -1,14 +1,15 @@
 """INDEC (Instituto Nacional de Estadísticas de Argentina) data source for IPC."""
 
 import logging
+import time
+
 import pandas as pd
 import requests
-import time
-from datetime import datetime
 
-from ..models import DataResult
-from ..cache import cache_key, load_from_cache, save_to_cache
 from competitividad_turistica.config.settings import MAX_REINTENTOS, PAUSA_REINTENTO
+
+from ..cache import cache_key, load_from_cache, save_to_cache
+from ..models import DataResult
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,7 @@ def fetch_ipc_indec(start: str, end: str) -> DataResult:
     key = cache_key(country, "ipc", "indec")
     cached_series, cached_meta = load_from_cache(key)
     if cached_series is not None:
-        logger.info(f"Loaded ARG IPC INDEC from cache")
+        logger.info("Loaded ARG IPC INDEC from cache")
         return DataResult(
             data=cached_series,
             source="indec (cached)",
@@ -49,7 +50,7 @@ def fetch_ipc_indec(start: str, end: str) -> DataResult:
     try:
         url = "https://apis.datos.gob.ar/series/api/series/?ids=148.3_INIVELNAL_DICI_M_26&format=json"
 
-        logger.info(f"Fetching Argentina IPC from INDEC API")
+        logger.info("Fetching Argentina IPC from INDEC API")
 
         for attempt in range(MAX_REINTENTOS):
             try:

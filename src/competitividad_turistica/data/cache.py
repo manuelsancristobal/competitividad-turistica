@@ -1,12 +1,13 @@
 """CSV cache management for downloaded data."""
 
 import logging
-import json
+from datetime import datetime
 from pathlib import Path
-from datetime import datetime, timedelta
+
 import pandas as pd
 
 from competitividad_turistica.config.settings import CACHE_DIR, CACHE_MAX_AGE_DAYS
+
 from .models import CacheEntry
 
 logger = logging.getLogger(__name__)
@@ -61,7 +62,7 @@ def load_from_cache(key: str, max_age_days: int = CACHE_MAX_AGE_DAYS) -> tuple:
 
     try:
         # Check age
-        with open(meta_path, "r") as f:
+        with open(meta_path) as f:
             entry = CacheEntry.from_json(f.read())
 
         download_time = datetime.fromisoformat(entry.download_timestamp)

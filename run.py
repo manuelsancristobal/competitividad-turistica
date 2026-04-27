@@ -15,14 +15,11 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
-from pathlib import Path
 
 _PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 def _supports_color() -> bool:
-    if not hasattr(sys.stdout, "isatty") or not sys.stdout.isatty():
-        return False
-    return True
+    return hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
 
 _COLOR = _supports_color()
 

@@ -1,12 +1,13 @@
 """Banco Central de Chile API data source."""
 
 import logging
-import pandas as pd
-from typing import Optional
 
-from ..models import DataResult
+import pandas as pd
+
+from competitividad_turistica.config.settings import BCCH_PASS, BCCH_USER
+
 from ..cache import cache_key, load_from_cache, save_to_cache
-from competitividad_turistica.config.settings import BCCH_USER, BCCH_PASS
+from ..models import DataResult
 
 logger = logging.getLogger(__name__)
 

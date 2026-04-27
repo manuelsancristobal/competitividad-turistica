@@ -1,8 +1,10 @@
 """Core TCRB calculation and index normalization."""
 
 import logging
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+
 from competitividad_turistica.config.settings import BASE_INDEX, BASE_YEAR
 
 logger = logging.getLogger(__name__)
@@ -42,7 +44,7 @@ def normalize_index(series: pd.Series, base_year: int = BASE_YEAR, base: float =
     """
     series_clean = series.dropna()
     if series_clean.empty:
-        logger.warning(f"Empty series, cannot normalize")
+        logger.warning("Empty series, cannot normalize")
         return series, None
 
     # Try to use base_year
@@ -139,7 +141,7 @@ def calculate_tcrb_all(df: pd.DataFrame, countries: list) -> tuple:
                 )
                 tcrb_idx_blue, _ = normalize_index(tcrb_raw_blue, base_year=BASE_YEAR, base=BASE_INDEX)
                 tcrb_ma12_blue = tcrb_idx_blue.rolling(window=12).mean()
-                
+
                 result_df[f"TCRB_Raw_{country}_BLUE"] = tcrb_raw_blue
                 result_df[f"TCRB_Idx_{country}_BLUE"] = tcrb_idx_blue
                 result_df[f"TCRB_MA12_{country}_BLUE"] = tcrb_ma12_blue

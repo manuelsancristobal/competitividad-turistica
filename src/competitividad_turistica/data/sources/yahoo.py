@@ -1,14 +1,12 @@
 """Yahoo Finance data source for exchange rates."""
 
 import logging
+
 import pandas as pd
 import yfinance as yf
-from datetime import datetime
 
-from ..models import DataResult
 from ..cache import cache_key, load_from_cache, save_to_cache
-from competitividad_turistica.config.settings import MAX_REINTENTOS, PAUSA_REINTENTO
-import time
+from ..models import DataResult
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +98,7 @@ def fetch_fx_cross(ticker_pair: tuple, start: str, end: str) -> DataResult:
         result_usd_clp = fetch_fx_direct(ticker_usd_clp, start, end)
 
         if not result_mon_usd.success or not result_usd_clp.success:
-            raise ValueError(f"Could not fetch one or both components of cross-rate")
+            raise ValueError("Could not fetch one or both components of cross-rate")
 
         # Align on intersection of dates
         series_mon_usd = result_mon_usd.data

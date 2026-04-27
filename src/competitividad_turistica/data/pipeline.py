@@ -1,20 +1,22 @@
 """Data pipeline orchestrator - handles cascade of data sources."""
 
-import logging
 import json
-import pandas as pd
-from pathlib import Path
-from typing import Dict, Tuple
+import logging
 from datetime import datetime
 
-from .models import DataResult
-from .sources import bcch, yahoo, fred, worldbank, indec, bluelytics
-from .cache import cache_key, save_to_cache, clear_cache, cache_status
-from competitividad_turistica.config.settings import FECHA_INICIO, FECHA_FIN, PROJECT_ROOT
+import pandas as pd
+
 from competitividad_turistica.config.countries import (
-    COUNTRIES, COUNTRY_CODES, EUR_COUNTRIES, EUR_TICKER_CROSS,
-    CHILE_IPC_FRED, CHILE_WB_CODE
+    CHILE_WB_CODE,
+    COUNTRIES,
+    COUNTRY_CODES,
+    EUR_COUNTRIES,
 )
+from competitividad_turistica.config.settings import FECHA_FIN, FECHA_INICIO, PROJECT_ROOT
+
+from .cache import clear_cache
+from .models import DataResult
+from .sources import bcch, bluelytics, fred, indec, worldbank, yahoo
 
 logger = logging.getLogger(__name__)
 
@@ -119,7 +121,7 @@ def fetch_chile_ipc(start: str, end: str) -> DataResult:
     return result
 
 
-def fetch_all_countries(start: str = FECHA_INICIO, end: str = FECHA_FIN) -> Dict[str, Tuple[DataResult, DataResult]]:
+def fetch_all_countries(start: str = FECHA_INICIO, end: str = FECHA_FIN) -> dict[str, tuple[DataResult, DataResult]]:
     """
     Fetch FX and IPC for all 12 countries.
     Returns dict: {country_code: (fx_result, ipc_result)}
@@ -177,7 +179,7 @@ def fetch_parallel_fx_optional(country_code: str, start: str, end: str) -> DataR
     if country_code == "ARG":
         result = bluelytics.fetch_fx_bluelytics(start, end)
         if result.success:
-            logger.info(f"Fetched ARG blue dollar (parallel market)")
+            logger.info("Fetched ARG blue dollar (parallel market)")
             return result
         else:
             logger.warning(f"Failed to fetch ARG blue dollar: {result.error_message}")
@@ -185,9 +187,9 @@ def fetch_parallel_fx_optional(country_code: str, start: str, end: str) -> DataR
     return None
 
 
-def build_dataframe(results: Dict[str, Tuple[DataResult, DataResult]],
+def build_dataframe(results: dict[str, tuple[DataResult, DataResult]],
                     chile_ipc: DataResult,
-                    parallel_fx: Dict[str, DataResult] = None) -> Tuple[pd.DataFrame, Dict]:
+                    parallel_fx: dict[str, DataResult] = None) -> tuple[pd.DataFrame, dict]:
     """
     Build consolidated DataFrame from all results.
     Includes optional parallel FX rates (e.g., Argentina blue dollar).
@@ -233,14 +235,14 @@ def build_dataframe(results: Dict[str, Tuple[DataResult, DataResult]],
     # Add parallel FX if available
         if country_code in parallel_fx and parallel_fx[country_code] is not None:
             fx_blue_raw = parallel_fx[country_code].data
-            
+
             # Convert ARS/USD (blue) to CLP/ARS: (CLP/USD) / (ARS/USD)
             if country_code == "ARG" and "FX_USA" in df_dict:
                 fx_usd_clp = df_dict["FX_USA"]
                 # Align dates
                 common = fx_usd_clp.index.intersection(fx_blue_raw.index)
                 fx_blue_converted = fx_usd_clp.loc[common] / fx_blue_raw.loc[common]
-                
+
                 df_dict[f"FX_{country_code}_BLUE"] = fx_blue_converted
                 source_registry[country_code]["fx_parallel"] = {
                     "source": parallel_fx[country_code].source,
@@ -257,14 +259,14 @@ def build_dataframe(results: Dict[str, Tuple[DataResult, DataResult]],
 
     # Combine into DataFrame
     df = pd.DataFrame(df_dict)
-    
+
     # Ensure master monthly index (MS) to avoid alignment issues
     if not df.empty:
         start_date = df.index.min()
         end_date = df.index.max()
         master_index = pd.date_range(start=start_date, end=end_date, freq="MS")
         df = df.reindex(master_index)
-        
+
         # Final interpolation for very small gaps if any (max 2 months)
         df = df.interpolate(method="linear", limit=2)
 
@@ -305,7 +307,7 @@ def _export_consolidated_data(df: pd.DataFrame, source_registry: dict) -> None:
     logger.info(f"Exported source registry to {json_path}")
 
 
-def run_pipeline(start: str = FECHA_INICIO, end: str = FECHA_FIN) -> Tuple[pd.DataFrame, Dict]:
+def run_pipeline(start: str = FECHA_INICIO, end: str = FECHA_FIN) -> tuple[pd.DataFrame, dict]:
     """
     Execute full pipeline: fetch all data, build DataFrame.
     Returns (df, source_registry).

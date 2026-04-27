@@ -1,6 +1,7 @@
 """Visual theme and styling constants."""
 
 import plotly.graph_objects as go
+
 from competitividad_turistica.config.countries import COUNTRIES
 
 # Color palette for 12 countries (region-aware)

@@ -1,26 +1,30 @@
 """Main Streamlit dashboard application for TCRB analysis."""
 
 import logging
-import streamlit as st
-import pandas as pd
 from datetime import datetime, timedelta
-import numpy as np
 
-from competitividad_turistica.config.settings import FECHA_INICIO, FECHA_FIN
-from competitividad_turistica.config.countries import COUNTRY_CODES, COUNTRY_NAMES, COUNTRIES
-from competitividad_turistica.data.pipeline import run_pipeline, cache_status
-from competitividad_turistica.calc.tcrb import calculate_tcrb_all
+import pandas as pd
+import streamlit as st
+
+from competitividad_turistica.calc.correlation import correlation_matrix
 from competitividad_turistica.calc.decomposition import decompose_tcrb
 from competitividad_turistica.calc.seasonality import monthly_pattern
-from competitividad_turistica.calc.volatility import rolling_volatility, volatility_regime
-from competitividad_turistica.calc.correlation import correlation_matrix
-from competitividad_turistica.calc.statistics import summary_table, last_n_months
+from competitividad_turistica.calc.statistics import last_n_months, summary_table
+from competitividad_turistica.calc.tcrb import calculate_tcrb_all
+from competitividad_turistica.calc.volatility import rolling_volatility
+from competitividad_turistica.config.countries import COUNTRY_CODES, COUNTRY_NAMES
+from competitividad_turistica.config.settings import FECHA_INICIO
+from competitividad_turistica.data.pipeline import cache_status, run_pipeline
 from competitividad_turistica.viz.charts import (
-    tcrb_line_chart, tcrb_comparison_chart, decomposition_chart,
-    seasonality_chart, volatility_chart, correlation_heatmap,
-    rolling_correlation_chart
+    correlation_heatmap,
+    decomposition_chart,
+    rolling_correlation_chart,
+    seasonality_chart,
+    tcrb_comparison_chart,
+    tcrb_line_chart,
+    volatility_chart,
 )
-from competitividad_turistica.viz.tables import summary_stats_table, last_12_months_table, source_registry_table
+from competitividad_turistica.viz.tables import last_12_months_table, source_registry_table
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -261,11 +265,11 @@ if arg_fx_mode == "blue" and "ARG" in selected_countries:
         # Swap columns so visualization functions use the blue rate
         df_filtered["TCRB_Idx_ARG_OFFICIAL"] = df_filtered["TCRB_Idx_ARG"]
         df_filtered["TCRB_Idx_ARG"] = df_filtered["TCRB_Idx_ARG_BLUE"]
-        
+
         if "TCRB_MA12_ARG_BLUE" in df_filtered.columns:
             df_filtered["TCRB_MA12_ARG_OFFICIAL"] = df_filtered["TCRB_MA12_ARG"]
             df_filtered["TCRB_MA12_ARG"] = df_filtered["TCRB_MA12_ARG_BLUE"]
-        
+
         st.info("💡 Usando Dólar Blue para Argentina")
     else:
         st.warning("⚠️ Datos de Dólar Blue no disponibles. Usando tipo de cambio oficial.")

@@ -1,10 +1,11 @@
 """Correlation analysis between countries."""
 
 import logging
-import pandas as pd
-import numpy as np
-from scipy import stats
 import warnings
+
+import numpy as np
+import pandas as pd
+from scipy import stats
 
 logger = logging.getLogger(__name__)
 

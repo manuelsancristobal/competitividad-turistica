@@ -1,6 +1,7 @@
 """Plotly table generation."""
 
 import logging
+
 import pandas as pd
 import plotly.graph_objects as go
 

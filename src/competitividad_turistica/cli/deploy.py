@@ -2,12 +2,13 @@
 
 import logging
 import shutil
+
 from competitividad_turistica.config.settings import (
-    JEKYLL_REPO,
     JEKYLL_ASSETS_DIR,
-    JEKYLL_PROJECTS_DIR,
     JEKYLL_PROJECT_MD,
-    OUTPUT_DIR
+    JEKYLL_PROJECTS_DIR,
+    JEKYLL_REPO,
+    OUTPUT_DIR,
 )
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")

@@ -1,0 +1,68 @@
+Metadata-Version: 2.4
+Name: competitividad-turistica
+Version: 0.1.0
+Summary: Análisis automatizado del Tipo de Cambio Real Bilateral (TCRB) para competitividad turística de Chile
+Author-email: Manuel San Cristóbal <msancristo@fen.uchile.cl>
+License: MIT
+Project-URL: Homepage, https://github.com/manuelsancristobal/competitividad-turistica
+Project-URL: Repository, https://github.com/manuelsancristobal/competitividad-turistica
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: streamlit>=1.30.0
+Requires-Dist: plotly>=5.18.0
+Requires-Dist: pandas>=2.1.0
+Requires-Dist: numpy>=1.26.0
+Requires-Dist: yfinance>=0.2.31
+Requires-Dist: pandas-datareader>=0.10.0
+Requires-Dist: wbgapi>=1.0.12
+Requires-Dist: bcch>=0.0.1
+Requires-Dist: requests>=2.31.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: pydantic-settings>=2.2.1
+Requires-Dist: pydantic>=2.6.3
+Provides-Extra: dev
+Requires-Dist: pytest>=8.1.1; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: ruff>=0.3.2; extra == "dev"
+Requires-Dist: pre-commit>=3.6.0; extra == "dev"
+
+# Competitividad Turística - Análisis de TCRB Multimercado
+
+## 🎯 Impacto y Valor del Proyecto
+Este proyecto calcula el Índice de Competitividad Turística de Chile mediante el Tipo de Cambio Real Bilateral (TCRB) ajustado por inflación, permitiendo monitorear qué tan costoso es Chile para sus principales mercados emisores (Argentina, Brasil, USA, Europa). Incluye un ajuste pionero por el "Dólar Blue" argentino para capturar la competitividad real en contextos de brecha cambiaria. Es una herramienta esencial para la planificación de campañas de promoción internacional basadas en poder adquisitivo relativo.
+
+## 🛠️ Stack Tecnológico
+- **Lenguaje**: Python 3.10+
+- **Librerías Clave**: `Pandas`, `Pydantic` (Validación), `Plotly` (Dashboard), `Requests`.
+- **Calidad de Código**: `Ruff`, `Pytest`, `Pre-commit`.
+- **Infraestructura**: Docker, GitHub Actions.
+
+## 📊 Arquitectura de Datos y Metodología
+1. **Ingesta Multinivel**: Conectores para APIs del Banco Central de Chile, FRED, Banco Mundial y Yahoo Finance.
+2. **Normalización**: Alineación de series temporales de IPC y tipos de cambio con diferentes periodicidades.
+3. **Cálculo de TCRB**: Aplicación de fórmulas de paridad de poder adquisitivo para generar índices de competitividad.
+4. **Análisis Estadístico**: Detección de estacionalidad, volatilidad cambiaria y correlación multimercado.
+5. **Dashboard**: Interfaz interactiva para la visualización de series históricas y métricas de riesgo.
+
+## 🚀 Quick Start (Reproducibilidad)
+1. `git clone https://github.com/manuelsancristobal/competitividad-turistica`
+2. `make install-dev`
+3. `make test`
+4. `make run` (Ejecuta el pipeline completo de actualización de datos)
+5. `make dashboard` (Inicia el dashboard interactivo en `localhost:8050`)
+
+## 📂 Estructura del Proyecto
+- `src/`: Lógica de cálculo, conectores de datos y visualización.
+- `data/`: Cache de APIs y resultados procesados (`external/`, `processed/`).
+- `docs/`: Documentación técnica y metodológica detallada.
+
+---
+**Autor**: Manuel San Cristóbal  
+**Licencia**: MIT

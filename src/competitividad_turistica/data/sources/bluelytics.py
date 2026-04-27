@@ -1,14 +1,15 @@
 """Bluelytics data source for Argentine parallel market exchange rate (dólar blue)."""
 
 import logging
+import time
+
 import pandas as pd
 import requests
-import time
-from datetime import datetime
 
-from ..models import DataResult
-from ..cache import cache_key, load_from_cache, save_to_cache
 from competitividad_turistica.config.settings import MAX_REINTENTOS, PAUSA_REINTENTO
+
+from ..cache import cache_key, load_from_cache, save_to_cache
+from ..models import DataResult
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ def fetch_fx_bluelytics(start: str, end: str) -> DataResult:
     key = cache_key(country, "fx_blue", "bluelytics")
     cached_series, cached_meta = load_from_cache(key)
     if cached_series is not None:
-        logger.info(f"Loaded ARG blue dollar from cache")
+        logger.info("Loaded ARG blue dollar from cache")
         return DataResult(
             data=cached_series,
             source="bluelytics (cached)",
@@ -51,7 +52,7 @@ def fetch_fx_bluelytics(start: str, end: str) -> DataResult:
     try:
         url = "https://api.bluelytics.com.ar/v2/evolution.json"
 
-        logger.info(f"Fetching Argentina blue dollar (ARS/USD) from Bluelytics API")
+        logger.info("Fetching Argentina blue dollar (ARS/USD) from Bluelytics API")
 
         for attempt in range(MAX_REINTENTOS):
             try:

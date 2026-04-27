@@ -3,22 +3,28 @@
 import os
 from datetime import datetime
 from pathlib import Path
-from pydantic_settings import BaseSettings, SettingsConfigDict
+
 from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Project paths
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-CACHE_DIR = PROJECT_ROOT / "cache"
+DATA_DIR = PROJECT_ROOT / "data"
+CACHE_DIR = DATA_DIR / "external"
+OUTPUT_DIR = DATA_DIR / "processed"
+
+DATA_DIR.mkdir(parents=True, exist_ok=True)
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
-OUTPUT_DIR = PROJECT_ROOT / "output"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
 ASSETS_DIR = PROJECT_ROOT / "viz" # O donde se guarden los graficos estaticos
 
 # Jekyll paths
-_jekyll_env = os.getenv("JEKYLL_REPO", str(PROJECT_ROOT.parent / "manuelsancristobal.github.io"))
-JEKYLL_REPO = Path(_jekyll_env)
-JEKYLL_BASE = JEKYLL_REPO / "proyectos" / "competitividad-turistica"
-JEKYLL_ASSETS_DIR = JEKYLL_BASE / "assets"
-JEKYLL_PROJECTS_DIR = JEKYLL_REPO / "_projects"
+_jekyll_env = os.getenv("JEKYLL_REPO")
+JEKYLL_REPO: Path | None = Path(_jekyll_env) if _jekyll_env else None
+JEKYLL_BASE = (JEKYLL_REPO / "proyectos" / "competitividad-turistica") if JEKYLL_REPO else None
+JEKYLL_ASSETS_DIR = (JEKYLL_BASE / "assets") if JEKYLL_BASE else None
+JEKYLL_PROJECTS_DIR = (JEKYLL_REPO / "_projects") if JEKYLL_REPO else None
 JEKYLL_PROJECT_MD = PROJECT_ROOT / "jekyll" / "competitividad-turistica.md"
 
 class Settings(BaseSettings):

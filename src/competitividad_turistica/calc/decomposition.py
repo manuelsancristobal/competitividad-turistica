@@ -1,8 +1,8 @@
 """TCRB decomposition: exchange rate vs inflation effects."""
 
 import logging
+
 import pandas as pd
-import numpy as np
 
 logger = logging.getLogger(__name__)
 

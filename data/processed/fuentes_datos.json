@@ -1,0 +1,162 @@
+{
+  "generated_at": "2026-04-25T21:23:20.587085",
+  "rows": 324,
+  "columns": [
+    "IPC_CHL",
+    "FX_ARG",
+    "IPC_ARG",
+    "FX_ARG_BLUE",
+    "FX_PER",
+    "IPC_PER",
+    "FX_BOL",
+    "IPC_BOL",
+    "FX_BRA",
+    "IPC_BRA",
+    "FX_USA",
+    "IPC_USA",
+    "FX_CAN",
+    "IPC_CAN",
+    "FX_ESP",
+    "IPC_ESP",
+    "FX_FRA",
+    "IPC_FRA",
+    "FX_DEU",
+    "IPC_DEU",
+    "FX_GBR",
+    "IPC_GBR",
+    "FX_CHN",
+    "IPC_CHN",
+    "FX_AUS",
+    "IPC_AUS"
+  ],
+  "date_range": [
+    "2000-01-01",
+    "2026-12-01"
+  ],
+  "sources": {
+    "ARG": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F072.CLP.ARS.N.O.D"
+      },
+      "ipc": {
+        "source": "indec (cached)",
+        "series_id": "148.3_INIVELNAL_DICI_M_26"
+      },
+      "fx_parallel": {
+        "source": "bluelytics (cached)",
+        "series_id": "blue_ars_usd"
+      }
+    },
+    "PER": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F072.CLP.PEN.N.O.D"
+      },
+      "ipc": {
+        "source": "worldbank (cached)",
+        "series_id": "FP.CPI.TOTL"
+      }
+    },
+    "BOL": {
+      "fx": {
+        "source": "yahoo (cached)",
+        "series_id": "BOBUSD=X_x_CLP=X"
+      },
+      "ipc": {
+        "source": "worldbank (cached)",
+        "series_id": "FP.CPI.TOTL"
+      }
+    },
+    "BRA": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F072.CLP.BRL.N.O.D"
+      },
+      "ipc": {
+        "source": "fred (cached)",
+        "series_id": "CPALTT01BRM657N"
+      }
+    },
+    "USA": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F073.TCO.PRE.Z.D"
+      },
+      "ipc": {
+        "source": "fred (cached)",
+        "series_id": "CPIAUCSL"
+      }
+    },
+    "CAN": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F072.CLP.CAD.N.O.D"
+      },
+      "ipc": {
+        "source": "fred (cached)",
+        "series_id": "FPCPITOTLZGCAN"
+      }
+    },
+    "ESP": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F072.CLP.EUR.N.O.D"
+      },
+      "ipc": {
+        "source": "fred (cached)",
+        "series_id": "FPCPITOTLZGESP"
+      }
+    },
+    "FRA": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F072.CLP.EUR.N.O.D"
+      },
+      "ipc": {
+        "source": "fred (cached)",
+        "series_id": "FPCPITOTLZGFRA"
+      }
+    },
+    "DEU": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F072.CLP.EUR.N.O.D"
+      },
+      "ipc": {
+        "source": "fred (cached)",
+        "series_id": "FPCPITOTLZGDEU"
+      }
+    },
+    "GBR": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F072.CLP.GBP.N.O.D"
+      },
+      "ipc": {
+        "source": "fred (cached)",
+        "series_id": "CPALTT01GBM659N"
+      }
+    },
+    "CHN": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F072.CLP.CNY.N.O.D"
+      },
+      "ipc": {
+        "source": "fred (cached)",
+        "series_id": "CPALTT01CNM659N"
+      }
+    },
+    "AUS": {
+      "fx": {
+        "source": "bcch (cached)",
+        "series_id": "F072.CLP.AUD.N.O.D"
+      },
+      "ipc": {
+        "source": "fred (cached)",
+        "series_id": "FPCPITOTLZGAUS"
+      }
+    }
+  }
+}

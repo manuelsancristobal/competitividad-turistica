@@ -1,9 +1,11 @@
-import pytest
-import pandas as pd
+
 import numpy as np
-from datetime import datetime
-from competitividad_turistica.calc.tcrb import calculate_tcrb_raw, normalize_index, compute_stats
+import pandas as pd
+import pytest
+
+from competitividad_turistica.calc.tcrb import calculate_tcrb_raw, compute_stats, normalize_index
 from competitividad_turistica.data.sources.fred import _inflation_rate_to_cpi_index
+
 
 def test_calculate_tcrb_raw():
     """Test raw TCRB calculation logic."""
@@ -26,10 +28,8 @@ def test_normalize_index():
 
     # Test with valid base year (2015)
     normalized, effective_year = normalize_index(series, base_year=2015, base=100.0)
-    
+
     assert effective_year == 2015
-    # The mean of 2015 (first 12 elements: 100 to 111) is 105.5
-    assert pytest.approx(normalized.mean(), 0.1) != 100.0 # Just making sure it normalized correctly
     # 2015 average should be ~100
     assert pytest.approx(normalized[normalized.index.year == 2015].mean(), 0.01) == 100.0
 
@@ -49,9 +49,9 @@ def test_compute_stats():
     """Test calculation of statistics."""
     dates = pd.date_range("2020-01-01", periods=14, freq="MS")
     series = pd.Series(np.linspace(100, 113, 14), index=dates)
-    
+
     stats = compute_stats(series)
-    
+
     assert stats["actual"] == 113.0
     assert stats["min"] == 100.0
     assert stats["max"] == 113.0

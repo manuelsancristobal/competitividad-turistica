@@ -1,16 +1,15 @@
 """Data models for the pipeline."""
 
-from dataclasses import dataclass, asdict
-from typing import Optional
-import pandas as pd
 import json
-from pathlib import Path
+from dataclasses import asdict, dataclass
+
+import pandas as pd
 
 
 @dataclass
 class DataResult:
     """Standard result from any data source."""
-    data: Optional[pd.Series]           # Time series data (DatetimeIndex)
+    data: pd.Series | None           # Time series data (DatetimeIndex)
     source: str                         # "bcch" | "yahoo" | "fred" | "worldbank"
     series_id: str                      # Identifier of the series used
     country: str                        # Country code (ISO3 or "CHL")
@@ -18,7 +17,7 @@ class DataResult:
     coverage: tuple                     # (start_date_str, end_date_str)
     obs_count: int                      # Number of valid observations
     success: bool                       # Whether download succeeded
-    error_message: Optional[str] = None # Error detail if failed
+    error_message: str | None = None # Error detail if failed
 
     def to_dict(self):
         """Convert to dict for JSON serialization."""

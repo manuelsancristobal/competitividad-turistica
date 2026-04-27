@@ -1,15 +1,15 @@
 """FRED (Federal Reserve Economic Data) source for CPI data."""
 
 import logging
+import time
+
 import pandas as pd
 import pandas_datareader.data as web
-from datetime import datetime
-import numpy as np
 
-from ..models import DataResult
-from ..cache import cache_key, load_from_cache, save_to_cache
 from competitividad_turistica.config.settings import MAX_REINTENTOS, PAUSA_REINTENTO
-import time
+
+from ..cache import cache_key, load_from_cache, save_to_cache
+from ..models import DataResult
 
 logger = logging.getLogger(__name__)
 
@@ -103,12 +103,12 @@ def fetch_ipc_fred(series_list: list, start: str, end: str, country: str = "n/a"
                         else:
                             # Resample to monthly and interpolate if it's annual data
                             series = series.resample("MS").mean()
-                        
+
                         # Interpolate gaps (e.g. from annual to monthly)
                         if series.isna().any():
                             logger.info(f"Interpolating gaps in FRED series {series_id}")
                             series = series.interpolate(method="linear")
-                            
+
                         series = series.dropna()
 
                         if len(series) < 12:

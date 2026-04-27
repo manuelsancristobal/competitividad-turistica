@@ -1,12 +1,15 @@
 """Plotly chart generation for TCRB analysis."""
 
 import logging
+
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
+
 from .theme import (
-    apply_theme, source_footnote, get_country_color, get_country_name,
-    MONTH_LABELS_ES, BCH_BLUE, FONT_SIZE_LABEL
+    apply_theme,
+    get_country_color,
+    get_country_name,
+    source_footnote,
 )
 
 logger = logging.getLogger(__name__)
