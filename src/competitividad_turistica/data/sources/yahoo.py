@@ -28,10 +28,7 @@ def fetch_fx_direct(ticker: str, start: str, end: str) -> DataResult:
         # Flatten to a simple Series
         if isinstance(data.columns, pd.MultiIndex):
             # Try Close price level
-            if "Close" in data.columns.get_level_values(0):
-                series = data["Close"].iloc[:, 0]
-            else:
-                series = data.iloc[:, 0]
+            series = data["Close"].iloc[:, 0] if "Close" in data.columns.get_level_values(0) else data.iloc[:, 0]
         else:
             if "Adj Close" in data.columns:
                 series = data["Adj Close"]

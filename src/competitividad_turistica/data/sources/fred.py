@@ -32,7 +32,7 @@ def _inflation_rate_to_cpi_index(inflation_series: pd.Series, base: float = 100.
     current_value = base
     prev_factor = None
 
-    for i, (date, factor) in enumerate(zip(inflation_series.index, monthly_factors)):
+    for i, (date, factor) in enumerate(zip(inflation_series.index, monthly_factors, strict=False)):
         year = date.year
         for month in range(1, 13):  # 1=Jan to 12=Dec
             month_date = pd.Timestamp(year=year, month=month, day=1)

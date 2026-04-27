@@ -19,7 +19,6 @@ def monthly_pattern(tcrb_index: pd.Series) -> pd.DataFrame:
 
     # Extract month from index
     months = tcrb_index.index.month
-    years = tcrb_index.index.year
 
     # Group by month
     monthly_stats = []
