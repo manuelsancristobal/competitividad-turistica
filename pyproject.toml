@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "competitividad-turistica"
+version = "0.1.0"
+description = "Análisis automatizado del Tipo de Cambio Real Bilateral (TCRB) para competitividad turística de Chile"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Manuel San Cristóbal", email = "msancristo@fen.uchile.cl"}
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "streamlit>=1.30.0",
+    "plotly>=5.18.0",
+    "pandas>=2.1.0",
+    "numpy>=1.26.0",
+    "yfinance>=0.2.31",
+    "pandas-datareader>=0.10.0",
+    "wbgapi>=1.0.12",
+    "bcch>=0.0.1",
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.0",
+    "pydantic-settings>=2.2.1",
+    "pydantic>=2.6.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.1.1",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.3.2",
+    "pre-commit>=3.6.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/manuelsancristobal/competitividad-turistica"
+Repository = "https://github.com/manuelsancristobal/competitividad-turistica"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--cov=src/competitividad_turistica --cov-report=term-missing"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]

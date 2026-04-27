@@ -1,0 +1,26 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+.env
+.venv
+venv/
+ENV/
+env/
+
+# Caché del proyecto
+cache/
+output/
+
+# IDEs
+.vscode/
+.idea/
+
+# Git
+.git/
+.gitignore
+
+# Archivos de SO
+.DS_Store
+Thumbs.db

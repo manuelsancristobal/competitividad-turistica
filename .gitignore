@@ -1,0 +1,22 @@
+# Entornos virtuales
+venv/
+env/
+.venv/
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Directorios de datos y resultados generados
+cache/
+output/
+
+# Logs y configuraciones locales
+*.log
+.claude/

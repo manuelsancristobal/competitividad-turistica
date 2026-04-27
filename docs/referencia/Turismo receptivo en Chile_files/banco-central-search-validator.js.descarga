@@ -1,0 +1,36 @@
+﻿(function () {
+    Liferay.on('allPortletsReady', function () {
+        document.querySelectorAll("input[id^='_com_liferay_portal_search_web_search_bar_portlet_'][type='text']").forEach((input) => {
+            const form = input.closest("form");
+
+            if (form) {
+                const submitButton = form.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+
+					let initialValue = input.value.replace(/[^a-zA-Z0-9\u00C0-\u017F"*\s]/g, '');
+					const initialValidCharCount = initialValue.replace(/\s+/g, '').length;
+					submitButton.disabled = initialValidCharCount < 3;
+
+                    input.addEventListener("input", function () {
+                        let value = input.value;
+
+                        value = value.replace(/[^a-zA-Z0-9\u00C0-\u017F"*\s]/g, '');
+                        input.value = value;
+
+						const validCharCount = value.replace(/\s+/g, '').length;			
+						submitButton.disabled = validCharCount < 3;
+                    });
+
+                    form.addEventListener("submit", function (e) {
+                        let value = input.value;
+
+                        value = value.replace(/[^a-zA-Z0-9\u00C0-\u017F"*\s]/g, '');
+                        value = value.trim().replace(/\s+/g, ' ');
+                        input.value = value;
+                    }, true);
+                }
+            }
+        });
+    });
+})();

@@ -1,0 +1,207 @@
+$(document).ready(function(){
+
+    const queDispositivoVdcn = () => {
+        const mobileQuery = window.matchMedia('(max-width: 768px)');
+        const tabletQuery = window.matchMedia('(min-width: 768px) and (max-width: 1280px)');
+        const desktopQuery = window.matchMedia('(min-width: 1280px)');
+        
+        if (desktopQuery.matches) {
+            return 'Desktop';
+        } else if (tabletQuery.matches) {
+            return 'Tablet';
+        } else if (mobileQuery.matches) {
+            return 'Mobile';
+        }
+    };
+    
+    // DESTACAR NIVEL SELECCIONADO
+    const limpiaSegundoNivel = () => {
+        $('.segundo-nivel').removeClass('activo');
+    }
+    
+    $('.segundo-nivel').on('click', function(){
+        limpiaSegundoNivel();
+        $(this).addClass('activo');
+    });
+    
+    $('.bc-vdcn-j-articulo-principal').on('click', function(){
+        console.log('principal');
+        limpiaSegundoNivel();
+    });
+    // FIN DESTACAR NIVEL SELECCIONADO
+    
+    // CONTROL TOGGLER 
+    const elementosToggler = {
+        boton: $('.bc-j-btn-toggle')
+    };
+    
+    elementosToggler.boton.on('click', function(){
+        let objetivo = $(this).attr('data-toggler'),
+            elementoObjetivo = $('[data-toggle="' + objetivo + '"]');
+            
+        if(elementoObjetivo.is(':visible')){
+            elementoObjetivo.slideUp();
+        }else{
+            elementoObjetivo.slideDown();
+        }
+    
+    });
+    // FIN CONTROL TOGGLER 
+    
+    // CONTROL SIDEBAR
+    
+    let dispositivo = queDispositivoVdcn(),
+        sidebarToggleable = $('.bc-vdcn-o-toggler-sidebar');
+    
+    if(dispositivo == 'Mobile'){
+        sidebarToggleable.hide();
+    }else{
+        sidebarToggleable.show();
+    }
+    
+    // FIN CONTROL SIDEBAR
+    
+    // DESCARGAR COMO PDF
+            
+    const { jsPDF } = window.jspdf;
+    
+    $('.descargar-seccion').on('click', function() {
+        generarPdf(this);
+    });
+    
+    const generarPdf = (boton) => {
+        let div = $(boton).parent().prev(),
+            titulo = $(div).attr('id');
+    
+        if (!div.hasClass('div-descargable')){
+            console.error('No es descargable');
+            return;
+        }
+    
+        html2canvas(div[0]).then((canvas) => {
+            let imgData = canvas.toDataURL('image/png'),
+                pdf = new jsPDF('p', 'mm', 'letter'),
+                pageWidth = pdf.internal.pageSize.getWidth(),
+                pageHeight = pdf.internal.pageSize.getHeight(),
+                imgWidth = pageWidth - 20, // Ancho de la imagen ajustado con margen de 10mm a cada lado
+                imgHeight = canvas.height * imgWidth / canvas.width,
+                position = 10; // Margen superior inicial
+    
+            pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+    
+            let heightLeft = imgHeight - (pageHeight - position);
+    
+            while (heightLeft >= 0) {
+                pdf.addPage();
+                position -= pageHeight - 20; // 10mm de margen inferior y superior
+                pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+    
+            pdf.save(titulo + '.pdf');
+        }).catch(function(error) {
+            console.error('Error al generar el PDF: ', error);
+        });
+    };
+    // DESCARGAR COMO PDF
+    
+    // EXTENSION ARCHIVOS DE DESCARGA
+    let descargables = $('.link-archivo-descargable');
+    
+    if(descargables.leght > 0){
+        $(".link-archivo-descargable").each(function() {
+            var url = $(this).attr("href");
+            if (url && url.trim() !== "") {
+                var extensionStartIndex = url.lastIndexOf(".") + 1;
+                var slashIndex = url.indexOf("/", extensionStartIndex);
+                var extension = url.substring(extensionStartIndex, slashIndex);
+                                
+                $(this).find(".extension-archivo").text(extension.toUpperCase());
+            }
+        });
+    };
+    // FIN EXTENSION ARCHIVOS DE DESCARGA
+    
+    // BUSCADOR SIMULADO
+    
+    let input = $('.bc-vdcn-c-buscador').find('input[type="text"]'),
+        inputSimulado = $('.buscador-simulado'),
+        buscadorOculto = $('.buscador-oculto'),
+        lupaOculta = buscadorOculto.find('button.btn-monospaced'),
+        lupaSimulada = $('.lupa-simulada'),
+        lenguajeActivo = themeDisplay.getLanguageId(),
+        esIngles = lenguajeActivo == 'en_US',
+        URLBusqueda = '/en/resultado-busqueda-cuentas-nacionales?q='
+    
+    const buscarSimulado = (contenido) => {
+        input.val(contenido);
+    }
+    
+    const clickFalso = () => {
+        lupaOculta.click();
+    }
+
+    const setearURL = (val) => {
+        let valSeteado = val.replace(/ /g, '%20');
+
+        return valSeteado;
+    }
+
+    const cambiarUrl = (query) => {
+        window.location = URLBusqueda + query;
+    }
+    
+    inputSimulado.on('keyup', function(e){
+        
+        let valor = $(this).val();
+
+        valor = valor.replace(/[^0-9a-zA-ZáéíóúÁÉÍÓÚñÑ",. ]/g, '');
+
+        $(this).val(valor);
+
+        buscarSimulado(valor);
+
+        if(e.originalEvent.keyCode === 13){
+            if(esIngles){
+                let query = setearURL(valor);
+                cambiarUrl(query);
+            }else{
+                clickFalso();
+            }
+        };
+    });
+    
+    lupaSimulada.on('click', function(){
+        let valor = inputSimulado.val();
+
+        if(esIngles){
+            let query = setearURL(valor);
+            cambiarUrl(query);
+        }else{
+            buscarSimulado(valor);
+            clickFalso();
+        }
+    });
+    
+    // FIN BUSCADOR SIMULADO
+    
+    // FUNCIONES PARA MODAL DESCRIPCION IMAGEN
+    
+    const imagenDescripcion = {
+        img: $('[data-imgtarget]'),
+    };
+    
+    imagenDescripcion.img.on('click', function(){
+        let id = $(this).data('imgtarget'),
+            modal = (id + '-modal');
+    
+        $(modal).removeClass('hiden');
+    });
+    
+    $('[data-dismiss]').on('click', function(){
+        $(this).closest('.custom-modal').addClass('hiden');
+    });
+    
+    // FIN FUNCIONES PARA MODAL DESCRIPCION IMAGEN
+
+});
