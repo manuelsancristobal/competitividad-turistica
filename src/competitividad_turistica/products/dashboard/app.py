@@ -73,9 +73,7 @@ st.set_page_config(
 )
 
 st.title("Competitividad Tur\u00edstica de Chile - TCRB Bilateral")
-st.markdown(
-    "An\u00e1lisis interactivo del Tipo de Cambio Real Bilateral (TCRB) de Chile vs 12 pa\u00edses"
-)
+st.markdown("An\u00e1lisis interactivo del Tipo de Cambio Real Bilateral (TCRB) de Chile vs 12 pa\u00edses")
 
 # ============================================================================
 # SIDEBAR CONTROLS
@@ -85,7 +83,7 @@ with st.sidebar:
     st.header("Controles")
 
     # Data refresh
-    if st.button("Actualizar Datos", width='stretch'):
+    if st.button("Actualizar Datos", width="stretch"):
         st.cache_data.clear()
         st.success("Cache limpiado. Los datos se recargar\u00e1n en la siguiente ejecuci\u00f3n.")
 
@@ -124,7 +122,7 @@ with st.sidebar:
         min_value=datetime.strptime(FECHA_INICIO, "%Y-%m-%d"),
         max_value=datetime.today(),
         value=(
-            datetime.today() - timedelta(days=365*5),
+            datetime.today() - timedelta(days=365 * 5),
             datetime.today(),
         ),
         format="YYYY-MM-DD",
@@ -195,6 +193,7 @@ with st.sidebar:
 # LOAD DATA (cached)
 # ============================================================================
 
+
 @st.cache_data(ttl=3600)
 def load_data():
     """Load and process all data."""
@@ -253,7 +252,7 @@ with quality_placeholder.container():
             st.write(f"{emoji} {COUNTRY_NAMES[country]}: {status}")
 
 # Filter by date range
-df_filtered = df.loc[date_range[0]:date_range[1]].copy()
+df_filtered = df.loc[date_range[0] : date_range[1]].copy()
 
 if df_filtered.empty:
     st.error("No hay datos en el rango de fechas seleccionado")
@@ -278,12 +277,14 @@ if arg_fx_mode == "blue" and "ARG" in selected_countries:
 # MAIN NAVIGATION
 # ============================================================================
 
-tab1, tab2, tab3, tab4 = st.tabs([
-    "Panorama",
-    "An\u00e1lisis por Pa\u00eds",
-    "Correlaciones",
-    "Datos",
-])
+tab1, tab2, tab3, tab4 = st.tabs(
+    [
+        "Panorama",
+        "An\u00e1lisis por Pa\u00eds",
+        "Correlaciones",
+        "Datos",
+    ]
+)
 
 # ============================================================================
 # TAB 1: PANORAMA GENERAL
@@ -304,20 +305,24 @@ with tab1:
     with col1:
         st.subheader("TCRB Multi-País")
         fig_comparison = tcrb_comparison_chart(df_filtered, selected_countries, source_registry)
-        st.plotly_chart(fig_comparison, width='stretch')
+        st.plotly_chart(fig_comparison, width="stretch")
 
     with col2:
         st.subheader("Resumen Actual")
         stats_table = summary_table(df_filtered, selected_countries)
         if not stats_table.empty:
-            st.dataframe(stats_table, width='stretch', hide_index=True)
+            st.dataframe(stats_table, width="stretch", hide_index=True)
 
         # Perspective interpretation
         st.markdown("**Interpretación:**")
         if perspective == "receptiva":
-            st.info("📊 TCRB **bajo** (< 100) = Chile **atractivo** para turistas\n\nTCRB **alto** (> 100) = Chile **caro** para turistas")
+            st.info(
+                "📊 TCRB **bajo** (< 100) = Chile **atractivo** para turistas\n\nTCRB **alto** (> 100) = Chile **caro** para turistas"
+            )
         else:
-            st.info("📊 TCRB **bajo** (< 100) = Destino **accesible** para chilenos\n\nTCRB **alto** (> 100) = Destino **caro** para chilenos")
+            st.info(
+                "📊 TCRB **bajo** (< 100) = Destino **accesible** para chilenos\n\nTCRB **alto** (> 100) = Destino **caro** para chilenos"
+            )
 
     st.divider()
 
@@ -326,7 +331,7 @@ with tab1:
     last_12 = last_n_months(df_filtered, selected_countries, n=12)
     if not last_12.empty:
         fig_table = last_12_months_table(last_12)
-        st.plotly_chart(fig_table, width='stretch')
+        st.plotly_chart(fig_table, width="stretch")
 
 # ============================================================================
 # TAB 2: ANÁLISIS POR PAÍS
@@ -362,14 +367,14 @@ with tab2:
                 show_ma12=show_ma12,
                 source_registry=source_registry,
             )
-            st.plotly_chart(fig_tcrb, width='stretch')
+            st.plotly_chart(fig_tcrb, width="stretch")
 
         # Decomposition
         with col2:
             decomp = decompose_tcrb(df_filtered, selected_country, periods=12)
             if not decomp.empty:
                 fig_decomp = decomposition_chart(decomp, selected_country)
-                st.plotly_chart(fig_decomp, width='stretch')
+                st.plotly_chart(fig_decomp, width="stretch")
 
         col3, col4 = st.columns(2)
 
@@ -378,14 +383,14 @@ with tab2:
             monthly = monthly_pattern(df_filtered[f"TCRB_Idx_{selected_country}"])
             if not monthly.empty:
                 fig_seasonal = seasonality_chart(monthly, selected_country)
-                st.plotly_chart(fig_seasonal, width='stretch')
+                st.plotly_chart(fig_seasonal, width="stretch")
 
         # Volatility
         with col4:
             vol = rolling_volatility(df_filtered[f"TCRB_Idx_{selected_country}"], window=12)
             if not vol.empty and not vol.dropna().empty:
                 fig_vol = volatility_chart(df_filtered, vol, selected_country)
-                st.plotly_chart(fig_vol, width='stretch')
+                st.plotly_chart(fig_vol, width="stretch")
             else:
                 st.info("Datos insuficientes para calcular volatilidad.")
 
@@ -423,12 +428,12 @@ with tab3:
         corr, pvalues = correlation_matrix(df_filtered, selected_countries)
         if not corr.empty:
             fig_corr = correlation_heatmap(corr)
-            st.plotly_chart(fig_corr, width='stretch')
+            st.plotly_chart(fig_corr, width="stretch")
 
             # Show p-values summary
             sig_pairs = 0
             for i in range(len(pvalues)):
-                for j in range(i+1, len(pvalues)):
+                for j in range(i + 1, len(pvalues)):
                     if pvalues.iloc[i, j] < 0.05:
                         sig_pairs += 1
             total_pairs = (len(pvalues) * (len(pvalues) - 1)) // 2
@@ -453,7 +458,7 @@ with tab3:
                 rolling_corr, rolling_pval = rolling_correlation(df_filtered, pair[0], pair[1], window=24)
                 if not rolling_corr.empty:
                     fig_rolling = rolling_correlation_chart(rolling_corr, pair[0], pair[1])
-                    st.plotly_chart(fig_rolling, width='stretch')
+                    st.plotly_chart(fig_rolling, width="stretch")
 
                     # Show current p-value
                     current_pval = rolling_pval.iloc[-1]
@@ -481,7 +486,7 @@ with tab4:
         )
 
         if selected_cols:
-            st.dataframe(df_filtered[selected_cols], width='stretch')
+            st.dataframe(df_filtered[selected_cols], width="stretch")
 
             # Download button
             csv = df_filtered[selected_cols].to_csv()
@@ -497,7 +502,7 @@ with tab4:
 
         if source_registry:
             fig_sources = source_registry_table(source_registry)
-            st.plotly_chart(fig_sources, width='stretch')
+            st.plotly_chart(fig_sources, width="stretch")
 
         st.text_area(
             "Detalles de fuentes (JSON)",
@@ -515,4 +520,3 @@ st.caption(
     f"\u00daltima actualizaci\u00f3n: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | "
     f"Datos: {df.index[0].date()} a {df.index[-1].date()}"
 )
-

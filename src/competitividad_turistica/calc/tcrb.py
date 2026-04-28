@@ -58,14 +58,13 @@ def normalize_index(series: pd.Series, base_year: int = BASE_YEAR, base: float =
     else:
         # Fallback: use (base_year-1, base_year, base_year+1) average
         fallback_data = series_clean[
-            (series_clean.index.year >= base_year - 1) &
-            (series_clean.index.year <= base_year + 1)
+            (series_clean.index.year >= base_year - 1) & (series_clean.index.year <= base_year + 1)
         ]
 
         if len(fallback_data) >= 6:
             base_mean = fallback_data.mean()
             effective_base_year = base_year  # Report as base_year for consistency
-            logger.info(f"Fallback: using {base_year-1}–{base_year+1} average ({len(fallback_data)} months)")
+            logger.info(f"Fallback: using {base_year - 1}–{base_year + 1} average ({len(fallback_data)} months)")
         else:
             # Last resort: use first year average (backward compatible)
             first_year = series_clean.index[0].year
@@ -113,11 +112,7 @@ def calculate_tcrb_all(df: pd.DataFrame, countries: list) -> tuple:
                 continue
 
             # Calculate raw TCRB
-            tcrb_raw = calculate_tcrb_raw(
-                df[fx_col],
-                df[ipc_col],
-                df[ipc_chl_col]
-            )
+            tcrb_raw = calculate_tcrb_raw(df[fx_col], df[ipc_col], df[ipc_chl_col])
 
             # Normalize to index (now returns tuple with effective base year)
             tcrb_idx, effective_base_year = normalize_index(tcrb_raw, base_year=BASE_YEAR, base=BASE_INDEX)
@@ -134,11 +129,7 @@ def calculate_tcrb_all(df: pd.DataFrame, countries: list) -> tuple:
             # Handle parallel FX if exists (e.g., Argentina Blue)
             fx_blue_col = f"FX_{country}_BLUE"
             if fx_blue_col in df.columns:
-                tcrb_raw_blue = calculate_tcrb_raw(
-                    df[fx_blue_col],
-                    df[ipc_col],
-                    df[ipc_chl_col]
-                )
+                tcrb_raw_blue = calculate_tcrb_raw(df[fx_blue_col], df[ipc_col], df[ipc_chl_col])
                 tcrb_idx_blue, _ = normalize_index(tcrb_raw_blue, base_year=BASE_YEAR, base=BASE_INDEX)
                 tcrb_ma12_blue = tcrb_idx_blue.rolling(window=12).mean()
 
@@ -163,7 +154,9 @@ def compute_stats(tcrb_index: pd.Series) -> dict:
         return {}
 
     # 12-month change
-    var_12m = ((tcrb_index.iloc[-1] - tcrb_index.iloc[-13]) / tcrb_index.iloc[-13] * 100) if len(tcrb_index) > 12 else np.nan
+    var_12m = (
+        ((tcrb_index.iloc[-1] - tcrb_index.iloc[-13]) / tcrb_index.iloc[-13] * 100) if len(tcrb_index) > 12 else np.nan
+    )
 
     stats = {
         "actual": float(tcrb_index.iloc[-1]),
@@ -214,4 +207,3 @@ def calculate_hp_filter(tcrb_index: pd.Series, lamb: int = 1600) -> pd.Series:
     except Exception as e:
         logger.error(f"HP filter calculation failed: {e}")
         return tcrb_index.copy()
-

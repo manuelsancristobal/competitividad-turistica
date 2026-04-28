@@ -54,7 +54,7 @@ def _inflation_rate_to_cpi_index(inflation_series: pd.Series, base: float = 100.
         prev_factor = factor
 
     result = pd.Series(cpi_values, index=pd.DatetimeIndex(dates))
-    result = result[~result.index.duplicated(keep='first')]
+    result = result[~result.index.duplicated(keep="first")]
     return result.sort_index()
 
 
@@ -162,5 +162,5 @@ def fetch_ipc_fred(series_list: list, start: str, end: str, country: str = "n/a"
 def fetch_ipc_chile(start: str, end: str) -> DataResult:
     """Convenience function for Chile IPC."""
     from competitividad_turistica.config.countries import CHILE_IPC_FRED
-    return fetch_ipc_fred(CHILE_IPC_FRED, start, end, country="CHL")
 
+    return fetch_ipc_fred(CHILE_IPC_FRED, start, end, country="CHL")

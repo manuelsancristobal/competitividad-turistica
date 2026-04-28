@@ -62,17 +62,17 @@ def fetch_fx_bluelytics(start: str, end: str) -> DataResult:
                 break
             except (requests.RequestException, ValueError) as e:
                 if attempt < MAX_REINTENTOS - 1:
-                    logger.warning(f"Bluelytics API attempt {attempt+1} failed: {e}. Retrying...")
+                    logger.warning(f"Bluelytics API attempt {attempt + 1} failed: {e}. Retrying...")
                     time.sleep(PAUSA_REINTENTO)
                 else:
-                    raise Exception(f"Bluelytics API failed after {MAX_REINTENTOS} attempts: {e}")
+                    raise Exception(f"Bluelytics API failed after {MAX_REINTENTOS} attempts: {e}") from e
 
         # Parse response
         # New Bluelytics API returns a flat list of entries:
         # [{"date": "YYYY-MM-DD", "source": "Blue"|"Oficial", "value_sell": float, "value_buy": float}, ...]
 
         if not isinstance(data_json, list):
-             return DataResult(
+            return DataResult(
                 data=None,
                 source="bluelytics",
                 series_id="blue_ars_usd",
@@ -81,7 +81,7 @@ def fetch_fx_bluelytics(start: str, end: str) -> DataResult:
                 coverage=("", ""),
                 obs_count=0,
                 success=False,
-                error_message="Bluelytics API returned unexpected data format (expected list)"
+                error_message="Bluelytics API returned unexpected data format (expected list)",
             )
 
         blue_entries = [entry for entry in data_json if entry.get("source") == "Blue"]
@@ -96,7 +96,7 @@ def fetch_fx_bluelytics(start: str, end: str) -> DataResult:
                 coverage=("", ""),
                 obs_count=0,
                 success=False,
-                error_message="Bluelytics API returned no entries with source='Blue'"
+                error_message="Bluelytics API returned no entries with source='Blue'",
             )
 
         dates = []
@@ -126,20 +126,20 @@ def fetch_fx_bluelytics(start: str, end: str) -> DataResult:
                 coverage=("", ""),
                 obs_count=0,
                 success=False,
-                error_message="No valid data points extracted from Bluelytics API"
+                error_message="No valid data points extracted from Bluelytics API",
             )
 
         # Create series
         series = pd.Series(values, index=pd.DatetimeIndex(dates))
         series = series.sort_index()
-        series = series[~series.index.duplicated(keep='first')]
+        series = series[~series.index.duplicated(keep="first")]
 
         # Filter to requested date range
         try:
             start_date = pd.to_datetime(start)
             end_date = pd.to_datetime(end)
             series = series[(series.index >= start_date) & (series.index <= end_date)]
-        except:
+        except Exception:
             pass  # Use full range if parsing fails
 
         if series.empty:
@@ -152,7 +152,7 @@ def fetch_fx_bluelytics(start: str, end: str) -> DataResult:
                 coverage=("", ""),
                 obs_count=0,
                 success=False,
-                error_message=f"No data in requested range {start} to {end}"
+                error_message=f"No data in requested range {start} to {end}",
             )
 
         # Resample to monthly average (first day of month)
@@ -184,6 +184,5 @@ def fetch_fx_bluelytics(start: str, end: str) -> DataResult:
             coverage=("", ""),
             obs_count=0,
             success=False,
-            error_message=str(e)
+            error_message=str(e),
         )
-

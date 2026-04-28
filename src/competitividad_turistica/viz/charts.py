@@ -79,8 +79,10 @@ def tcrb_line_chart(
         footnote_text = source_footnote(source_registry, country)
         fig.add_annotation(
             text=footnote_text,
-            x=0, y=-0.15,
-            xref="paper", yref="paper",
+            x=0,
+            y=-0.15,
+            xref="paper",
+            yref="paper",
             showarrow=False,
             font=dict(size=10),
             xanchor="left",

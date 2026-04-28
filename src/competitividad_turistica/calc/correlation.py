@@ -29,7 +29,7 @@ def correlation_matrix(df: pd.DataFrame, countries: list) -> tuple:
     # Monthly returns
     returns = df[tcrb_columns].pct_change(fill_method=None)
 
-    if len(returns.dropna(how='all')) < 2:
+    if len(returns.dropna(how="all")) < 2:
         logger.warning("Insufficient data points for correlation analysis")
         return pd.DataFrame(), pd.DataFrame()
 
@@ -57,7 +57,7 @@ def correlation_matrix(df: pd.DataFrame, countries: list) -> tuple:
                                 corr, pval = stats.pearsonr(valid[col1], valid[col2])
                                 corr_matrix[i, j] = corr
                                 pvalue_matrix[i, j] = pval
-                            except:
+                            except Exception:
                                 corr_matrix[i, j] = np.nan
                                 pvalue_matrix[i, j] = np.nan
                     else:
@@ -100,8 +100,8 @@ def rolling_correlation(df: pd.DataFrame, c1: str, c2: str, window: int = 24) ->
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
         for idx in range(window - 1, len(returns1)):
-            window_r1 = returns1.iloc[idx - window + 1:idx + 1]
-            window_r2 = returns2.iloc[idx - window + 1:idx + 1]
+            window_r1 = returns1.iloc[idx - window + 1 : idx + 1]
+            window_r2 = returns2.iloc[idx - window + 1 : idx + 1]
 
             if len(window_r1) >= 3 and window_r1.notna().all() and window_r2.notna().all():
                 try:
@@ -111,7 +111,7 @@ def rolling_correlation(df: pd.DataFrame, c1: str, c2: str, window: int = 24) ->
                     else:
                         _, pval = stats.pearsonr(window_r1, window_r2)
                         rolling_pval.iloc[idx] = pval
-                except:
+                except Exception:
                     rolling_pval.iloc[idx] = np.nan
             else:
                 rolling_pval.iloc[idx] = np.nan

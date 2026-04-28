@@ -34,13 +34,7 @@ def fetch_country_fx(country_code: str, start: str, end: str) -> DataResult:
             return result
 
     # Try Yahoo Finance (direct or cross-rate)
-    result = yahoo.fetch_fx(
-        country_code,
-        config.fx_ticker_direct,
-        config.fx_ticker_cross,
-        start,
-        end
-    )
+    result = yahoo.fetch_fx(country_code, config.fx_ticker_direct, config.fx_ticker_cross, start, end)
 
     return result
 
@@ -106,6 +100,7 @@ def fetch_chile_ipc(start: str, end: str) -> DataResult:
     # Try BCCh first
     if bcch.is_available():
         from competitividad_turistica.config.countries import CHILE_BCCH_IPC
+
         result = bcch.fetch_ipc(CHILE_BCCH_IPC, start, end, "CHL")
         if result.success:
             return result
@@ -187,9 +182,9 @@ def fetch_parallel_fx_optional(country_code: str, start: str, end: str) -> DataR
     return None
 
 
-def build_dataframe(results: dict[str, tuple[DataResult, DataResult]],
-                    chile_ipc: DataResult,
-                    parallel_fx: dict[str, DataResult] = None) -> tuple[pd.DataFrame, dict]:
+def build_dataframe(
+    results: dict[str, tuple[DataResult, DataResult]], chile_ipc: DataResult, parallel_fx: dict[str, DataResult] = None
+) -> tuple[pd.DataFrame, dict]:
     """
     Build consolidated DataFrame from all results.
     Includes optional parallel FX rates (e.g., Argentina blue dollar).
@@ -232,7 +227,7 @@ def build_dataframe(results: dict[str, tuple[DataResult, DataResult]],
             },
         }
 
-    # Add parallel FX if available
+        # Add parallel FX if available
         if country_code in parallel_fx and parallel_fx[country_code] is not None:
             fx_blue_raw = parallel_fx[country_code].data
 
@@ -247,7 +242,7 @@ def build_dataframe(results: dict[str, tuple[DataResult, DataResult]],
                 source_registry[country_code]["fx_parallel"] = {
                     "source": parallel_fx[country_code].source,
                     "series_id": parallel_fx[country_code].series_id,
-                    "note": "Converted to CLP/ARS using official USD/CLP"
+                    "note": "Converted to CLP/ARS using official USD/CLP",
                 }
                 logger.info(f"Added converted parallel FX for {country_code}")
             else:
@@ -350,4 +345,3 @@ def refresh_cache():
     logger.info("Refreshing cache...")
     clear_cache()
     return run_pipeline()
-

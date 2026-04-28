@@ -14,6 +14,7 @@ from competitividad_turistica.config.settings import (
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger(__name__)
 
+
 def deploy() -> None:
     """Copia el archivo markdown y datos relevantes al repo Jekyll."""
     if not JEKYLL_REPO.exists():
@@ -39,6 +40,7 @@ def deploy() -> None:
         logger.info("Despliegue local completado exitosamente.")
     else:
         logger.warning(f"No se encontró el archivo markdown en {JEKYLL_PROJECT_MD}")
+
 
 if __name__ == "__main__":
     deploy()

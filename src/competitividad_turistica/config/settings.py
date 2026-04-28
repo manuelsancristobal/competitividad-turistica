@@ -17,7 +17,7 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-ASSETS_DIR = PROJECT_ROOT / "viz" # O donde se guarden los graficos estaticos
+ASSETS_DIR = PROJECT_ROOT / "viz"  # O donde se guarden los graficos estaticos
 
 # Jekyll paths
 _jekyll_env = os.getenv("JEKYLL_REPO")
@@ -27,8 +27,10 @@ JEKYLL_ASSETS_DIR = (JEKYLL_BASE / "assets") if JEKYLL_BASE else None
 JEKYLL_PROJECTS_DIR = (JEKYLL_REPO / "_projects") if JEKYLL_REPO else None
 JEKYLL_PROJECT_MD = PROJECT_ROOT / "jekyll" / "competitividad-turistica.md"
 
+
 class Settings(BaseSettings):
     """Pydantic Settings definition."""
+
     # Data date range
     FECHA_INICIO: str = Field(default="2000-01-01")
     FECHA_FIN: str = Field(default_factory=lambda: datetime.today().strftime("%Y-%m-%d"))
@@ -61,6 +63,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = Field(default="INFO")
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+
 
 # Instancia global de settings
 settings_app = Settings()

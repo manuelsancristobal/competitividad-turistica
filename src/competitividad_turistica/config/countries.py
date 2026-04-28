@@ -6,24 +6,25 @@ from dataclasses import dataclass
 @dataclass
 class CountryConfig:
     """Configuration for a country in TCRB analysis."""
-    name: str                           # Display name
-    code: str                           # ISO 3166-1 alpha-3
-    currency: str                       # ISO 4217
-    fx_ticker_direct: str | None     # Yahoo ticker for MON/CLP
-    fx_ticker_cross: tuple | None    # (MON/USD, USD/CLP) for cross-rate
-    ipc_fred_series: list               # FRED CPI series IDs (ordered by preference)
-    ipc_wb_country: str                 # World Bank country code
+
+    name: str  # Display name
+    code: str  # ISO 3166-1 alpha-3
+    currency: str  # ISO 4217
+    fx_ticker_direct: str | None  # Yahoo ticker for MON/CLP
+    fx_ticker_cross: tuple | None  # (MON/USD, USD/CLP) for cross-rate
+    ipc_fred_series: list  # FRED CPI series IDs (ordered by preference)
+    ipc_wb_country: str  # World Bank country code
     ipc_fred_inflation_annual: str | None  # FRED annual inflation for synthetic CPI
-    bcch_fx_series: str | None       # BCCh FX series ID
-    bcch_ipc_series: str | None      # BCCh CPI series ID
-    color_primary: str                  # HEX color for charts
-    color_secondary: str                # Secondary color
-    region: str                         # "latam" | "northamerica" | "europe" | "asiapacific"
-    uses_eur: bool = False              # True for Spain, France, Germany
+    bcch_fx_series: str | None  # BCCh FX series ID
+    bcch_ipc_series: str | None  # BCCh CPI series ID
+    color_primary: str  # HEX color for charts
+    color_secondary: str  # Secondary color
+    region: str  # "latam" | "northamerica" | "europe" | "asiapacific"
+    uses_eur: bool = False  # True for Spain, France, Germany
     indec_ipc_series: str | None = None  # INDEC IPC series (Argentina only)
-    use_worldbank_primary: bool = False     # If True, try World Bank before FRED
-    has_parallel_fx: bool = False           # If True, has parallel/blue market FX (Argentina)
-    tourist_weight: float = 1.0             # Tourist flow weight (1.0 = equal weight)
+    use_worldbank_primary: bool = False  # If True, try World Bank before FRED
+    has_parallel_fx: bool = False  # If True, has parallel/blue market FX (Argentina)
+    tourist_weight: float = 1.0  # Tourist flow weight (1.0 = equal weight)
 
 
 COUNTRIES = {

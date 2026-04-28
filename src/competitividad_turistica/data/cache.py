@@ -115,4 +115,3 @@ def cache_status() -> dict:
         "cache_dir_size_mb": round(size_bytes / (1024 * 1024), 2),
         "cache_dir": str(CACHE_DIR),
     }
-

@@ -17,8 +17,7 @@ def is_available() -> bool:
     return bool(BCCH_USER and BCCH_PASS)
 
 
-def _fetch_serie(series_id: str, start: str, end: str,
-                 country: str, variable: str) -> DataResult:
+def _fetch_serie(series_id: str, start: str, end: str, country: str, variable: str) -> DataResult:
     """
     Fetch any series from BCCh API (shared logic for FX and IPC).
 
@@ -89,7 +88,7 @@ def _fetch_serie(series_id: str, start: str, end: str,
 
         series = pd.Series(values, index=pd.DatetimeIndex(dates))
         series = series.sort_index()
-        series = series[~series.index.duplicated(keep='first')]
+        series = series[~series.index.duplicated(keep="first")]
         series = series.resample("MS").mean()
         series = series.dropna()
 
@@ -135,4 +134,3 @@ def fetch_fx(series_id: str, start: str, end: str, country: str = "n/a") -> Data
 def fetch_ipc(series_id: str, start: str, end: str, country: str = "n/a") -> DataResult:
     """Fetch IPC from BCCh API."""
     return _fetch_serie(series_id, start, end, country, variable="ipc")
-

@@ -115,9 +115,13 @@ def fetch_fx_cross(ticker_pair: tuple, start: str, end: str) -> DataResult:
         # Validate cross-rate is in reasonable range
         median_value = series.median()
         if median_value <= 0:
-            logger.warning(f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} has negative or zero values (median={median_value:.4f})")
+            logger.warning(
+                f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} has negative or zero values (median={median_value:.4f})"
+            )
         if median_value > 1_000_000:
-            logger.warning(f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} seems extremely high (median={median_value:.2f})")
+            logger.warning(
+                f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} seems extremely high (median={median_value:.2f})"
+            )
         if series.isna().sum() > len(series) * 0.2:
             logger.warning(f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} has >20% NaN values")
 
@@ -149,8 +153,7 @@ def fetch_fx_cross(ticker_pair: tuple, start: str, end: str) -> DataResult:
         )
 
 
-def fetch_fx(country_code: str, fx_ticker_direct: str, fx_ticker_cross: tuple,
-             start: str, end: str) -> DataResult:
+def fetch_fx(country_code: str, fx_ticker_direct: str, fx_ticker_cross: tuple, start: str, end: str) -> DataResult:
     """
     Fetch FX for a country, trying direct first, then cross-rate.
     Automatically caches results.
@@ -199,4 +202,3 @@ def fetch_fx(country_code: str, fx_ticker_direct: str, fx_ticker_cross: tuple,
         success=False,
         error_message="No valid FX ticker (direct or cross) configured",
     )
-

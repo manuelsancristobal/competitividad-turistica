@@ -1,7 +1,10 @@
 # Competitividad Turística - Análisis de TCRB Multimercado
 
+## Contexto
+Este proyecto nació de un correo electrónico que en 2021 le mandé a un profesor de mi posgrado, en él le aseguraba que veía una caída del Real Brasileño respecto al Peso Chileno, por lo que podía interpretar que era un desincentivo a la visita de los brasileños. Me respondió, de manera cortés, que no sabía qué cifras estaba mirando, porque la realidad (de 2021) era una depreciación del Peso ante el Real, lo que hacía conveniente visitar Chile. En esta confusión, y después de leer y no entender nada sobre los Tipo de Cambio Real Bilateral (TCRB), en 2026 decidí hacer este dashboard para aclarármelo de una vez por todas.
+
 ## Impacto y Valor del Proyecto
-Este proyecto calcula el Índice de Competitividad Turística de Chile mediante el Tipo de Cambio Real Bilateral (TCRB) ajustado por inflación, permitiendo monitorear qué tan costoso es Chile para sus principales mercados emisores (Argentina, Brasil, USA, Europa). Incluye un ajuste pionero por el "Dólar Blue" argentino para capturar la competitividad real en contextos de brecha cambiaria. Es una herramienta esencial para la planificación de campañas de promoción internacional basadas en poder adquisitivo relativo.
+Este proyecto calcula un Índice de Competitividad Turística de Chile mediante el TCRB ajustado por inflación, permitiendo monitorear qué tan costoso es Chile para sus principales mercados emisores (Argentina, Brasil, USA, Europa). También incluye un ajuste con el "Dólar Blue" argentino para capturar la competitividad real en contextos de brecha cambiaria. Con esto, puedes hacer una planificación de campañas de promoción internacional basadas en el poder adquisitivo relativo.
 
 ## Stack Tecnológico
 - **Lenguaje**: Python 3.10+

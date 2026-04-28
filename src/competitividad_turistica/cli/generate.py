@@ -22,5 +22,6 @@ def main():
         logger.error("Error al ejecutar el pipeline.")
         exit(1)
 
+
 if __name__ == "__main__":
     main()

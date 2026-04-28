@@ -81,27 +81,19 @@ def fetch_ipc_worldbank(country_code: str, start: str, end: str) -> DataResult:
             logger.warning(f"wbgapi DataFrame method failed: {e}, trying alternative")
             # Alternative: use wb.data.fetch
             records = []
-            for row in wb.data.fetch(indicator, economy=country_code,
-                                      time=range(start_year, end_year + 1)):
+            for row in wb.data.fetch(indicator, economy=country_code, time=range(start_year, end_year + 1)):
                 if row.get("value") is not None:
                     year = int(str(row["time"]).replace("YR", ""))
                     records.append((pd.Timestamp(f"{year}-01-01"), float(row["value"])))
 
             if len(records) < 5:
-                raise ValueError(f"Insufficient data from World Bank: {len(records)} years")
+                raise ValueError(f"Insufficient data from World Bank: {len(records)} years") from e
 
             records.sort(key=lambda x: x[0])
-            annual_series = pd.Series(
-                [r[1] for r in records],
-                index=pd.DatetimeIndex([r[0] for r in records])
-            )
+            annual_series = pd.Series([r[1] for r in records], index=pd.DatetimeIndex([r[0] for r in records]))
 
         # Interpolate from annual to monthly using cubic spline
-        date_range = pd.date_range(
-            start=f"{start_year}-01-01",
-            end=f"{end_year}-12-01",
-            freq="MS"
-        )
+        date_range = pd.date_range(start=f"{start_year}-01-01", end=f"{end_year}-12-01", freq="MS")
 
         # Reindex annual data to monthly
         series_monthly = annual_series.reindex(date_range)

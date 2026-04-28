@@ -1,4 +1,3 @@
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -21,6 +20,7 @@ def test_calculate_tcrb_raw():
     # (820 * 114) / 125 = 747.84
     assert pytest.approx(tcrb.iloc[2], 0.01) == 747.84
 
+
 def test_normalize_index():
     """Test index normalization logic with different base year scenarios."""
     dates = pd.date_range("2015-01-01", periods=24, freq="MS")
@@ -33,10 +33,11 @@ def test_normalize_index():
     # 2015 average should be ~100
     assert pytest.approx(normalized[normalized.index.year == 2015].mean(), 0.01) == 100.0
 
+
 def test_inflation_rate_to_cpi_index():
     """Test the conversion from annual inflation rate to monthly CPI."""
     dates = pd.date_range("2020-01-01", periods=2, freq="YS")
-    inflation_rate = pd.Series([10.0, 20.0], index=dates) # 10% in 2020, 20% in 2021
+    inflation_rate = pd.Series([10.0, 20.0], index=dates)  # 10% in 2020, 20% in 2021
 
     cpi = _inflation_rate_to_cpi_index(inflation_rate, base=100.0)
 
@@ -44,6 +45,7 @@ def test_inflation_rate_to_cpi_index():
     assert len(cpi) == 24
     assert cpi.iloc[0] == 100.0
     assert cpi.iloc[-1] > cpi.iloc[0]
+
 
 def test_compute_stats():
     """Test calculation of statistics."""
@@ -56,4 +58,3 @@ def test_compute_stats():
     assert stats["min"] == 100.0
     assert stats["max"] == 113.0
     assert "var_12m_pct" in stats
-

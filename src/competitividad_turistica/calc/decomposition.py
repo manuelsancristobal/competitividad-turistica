@@ -45,12 +45,14 @@ def decompose_tcrb(df: pd.DataFrame, country: str, periods: int = 12) -> pd.Data
     tcrb_yoy = (tcrb_ratio - 1) * 100
 
     # Build result DataFrame
-    result = pd.DataFrame({
-        "efecto_cambiario": efecto_cambiario,
-        "efecto_inflacion": efecto_inflacion,
-        "termino_interaccion": interaction_term,  # Small but reportable for high-inflation countries
-        "var_tcrb": tcrb_yoy,
-    })
+    result = pd.DataFrame(
+        {
+            "efecto_cambiario": efecto_cambiario,
+            "efecto_inflacion": efecto_inflacion,
+            "termino_interaccion": interaction_term,  # Small but reportable for high-inflation countries
+            "var_tcrb": tcrb_yoy,
+        }
+    )
 
     logger.info(f"TCRB decomposition for {country} (multiplicative, exact formula)")
 

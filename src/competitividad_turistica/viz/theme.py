@@ -6,18 +6,18 @@ from competitividad_turistica.config.countries import COUNTRIES
 
 # Color palette for 12 countries (region-aware)
 COLORS = {
-    "ARG": "#1f77b4",    # Blue
-    "PER": "#ff7f0e",    # Orange
-    "BOL": "#2ca02c",    # Green
-    "BRA": "#d62728",    # Red
-    "USA": "#9467bd",    # Purple
-    "CAN": "#8c564b",    # Brown
-    "ESP": "#e377c2",    # Pink
-    "FRA": "#7f7f7f",    # Grey
-    "DEU": "#bcbd22",    # Yellow-green
-    "GBR": "#17becf",    # Cyan
-    "CHN": "#ff9896",    # Light red
-    "AUS": "#c5b0d5",    # Light purple
+    "ARG": "#1f77b4",  # Blue
+    "PER": "#ff7f0e",  # Orange
+    "BOL": "#2ca02c",  # Green
+    "BRA": "#d62728",  # Red
+    "USA": "#9467bd",  # Purple
+    "CAN": "#8c564b",  # Brown
+    "ESP": "#e377c2",  # Pink
+    "FRA": "#7f7f7f",  # Grey
+    "DEU": "#bcbd22",  # Yellow-green
+    "GBR": "#17becf",  # Cyan
+    "CHN": "#ff9896",  # Light red
+    "AUS": "#c5b0d5",  # Light purple
 }
 
 # Typography
@@ -46,8 +46,7 @@ LAYOUT_DEFAULTS = dict(
 )
 
 # Month labels in Spanish
-MONTH_LABELS_ES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
-                   "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+MONTH_LABELS_ES = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
 
 
 def get_country_color(country_code: str) -> str:
@@ -111,4 +110,3 @@ def source_footnote(sources: dict, country: str = "") -> str:
     ipc_text = f"{ipc_src.get('source', '?')} ({ipc_src.get('series_id', '?')})"
 
     return f"Fuente: Tipo de cambio: {fx_text} | IPC: {ipc_text}"
-
