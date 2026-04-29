@@ -4,7 +4,6 @@ import logging
 import time
 
 import pandas as pd
-import pandas_datareader.data as web
 
 from competitividad_turistica.config.settings import MAX_REINTENTOS, PAUSA_REINTENTO
 
@@ -87,12 +86,15 @@ def fetch_ipc_fred(series_list: list, start: str, end: str, country: str = "n/a"
                 # Retry logic
                 for attempt in range(MAX_REINTENTOS):
                     try:
-                        data = web.DataReader(series_id, "fred", start=start, end=end)
+                        url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}&cosd={start}&coed={end}"
+                        data = pd.read_csv(url, index_col=0, parse_dates=True)
 
                         if data.empty:
                             raise ValueError("Empty data returned")
 
-                        series = data[series_id].dropna()
+                        # FRED CSV usa el series_id como nombre de columna (usualmente en mayúsculas)
+                        col_name = next((c for c in data.columns if c.upper() == series_id.upper()), data.columns[0])
+                        series = data[col_name].dropna()
 
                         if _is_inflation_rate_series(series_id):
                             # Convert annual inflation rate to CPI index
