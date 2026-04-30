@@ -8,7 +8,7 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Project paths
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 CACHE_DIR = DATA_DIR / "external"
 OUTPUT_DIR = DATA_DIR / "processed"
