@@ -1,5 +1,7 @@
 # Competitividad Turística - Análisis de TCRB Multimercado
 
+[![CI](https://github.com/manuelsancristobal/competitividad-turistica/actions/workflows/ci.yml/badge.svg)](https://github.com/manuelsancristobal/competitividad-turistica/actions/workflows/ci.yml)
+
 ## Contexto
 Este proyecto nació de un correo electrónico que en 2021 le mandé a un profesor de mi posgrado, en él le aseguraba que veía una caída del Real Brasileño respecto al Peso Chileno, por lo que podía interpretar que era un desincentivo a la visita de los brasileños. Me respondió, de manera cortés, que no sabía qué cifras estaba mirando, porque la realidad (de 2021) era una depreciación del Peso ante el Real, lo que hacía conveniente visitar Chile. En esta confusión, y después de leer y no entender nada sobre los Tipo de Cambio Real Bilateral (TCRB), en 2026 decidí hacer este dashboard para aclarármelo de una vez por todas.
 
