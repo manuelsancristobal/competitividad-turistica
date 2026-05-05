@@ -1,3 +1,4 @@
+LICENSE
 README.md
 pyproject.toml
 src/competitividad_turistica/__init__.py
@@ -36,5 +37,10 @@ src/competitividad_turistica/viz/__init__.py
 src/competitividad_turistica/viz/charts.py
 src/competitividad_turistica/viz/tables.py
 src/competitividad_turistica/viz/theme.py
+tests/test_cache.py
 tests/test_calc.py
+tests/test_correlation.py
 tests/test_edge_cases.py
+tests/test_statistics.py
+tests/test_viz.py
+tests/test_volatility.py

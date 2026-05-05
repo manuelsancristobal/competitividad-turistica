@@ -14,7 +14,8 @@ from competitividad_turistica.calc.tcrb import calculate_tcrb_all
 from competitividad_turistica.calc.volatility import rolling_volatility
 from competitividad_turistica.config.countries import COUNTRY_CODES, COUNTRY_NAMES
 from competitividad_turistica.config.settings import FECHA_INICIO
-from competitividad_turistica.data.pipeline import cache_status, run_pipeline
+from competitividad_turistica.data.cache import cache_status
+from competitividad_turistica.data.pipeline import run_pipeline
 from competitividad_turistica.viz.charts import (
     correlation_heatmap,
     decomposition_chart,

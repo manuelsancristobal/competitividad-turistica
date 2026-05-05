@@ -27,7 +27,7 @@ test:
 	pytest tests/ -v
 
 coverage:
-	pytest tests/ -v --cov=src/competitividad_turistica --cov-report=html --cov-report=term-missing
+	pytest tests/ -v --cov=src/competitividad_turistica --cov-report=html --cov-report=term-missing --cov-report=xml
 	@echo "\nReporte de cobertura generado en htmlcov/index.html"
 
 assets:

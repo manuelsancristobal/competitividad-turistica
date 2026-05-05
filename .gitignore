@@ -1,22 +1,37 @@
-# Entornos virtuales
-venv/
-env/
-.venv/
+# Directorios de datos y resultados generados
+cache/
 
-# Variables de entorno
+### --- PROFESSIONAL STANDARDS ---
+
+# Environments & Secrets
 .env
 .env.*
 !.env.example
+.venv/
+env/
+venv/
+*.env
+auth.json
 
-# Archivos compilados de Python
+# AI Assistants
+.claude/
+.gemini/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Project Specifics
+.coverage
+data/processed/
+data/work/
+output/
 __pycache__/
 *.py[cod]
-*$py.class
-
-# Directorios de datos y resultados generados
-cache/
-output/
-
-# Logs y configuraciones locales
 *.log
-.claude/
