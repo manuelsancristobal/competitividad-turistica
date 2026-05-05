@@ -17,12 +17,12 @@ def fetch_fx_direct(ticker: str, start: str, end: str) -> DataResult:
     Returns monthly average.
     """
     try:
-        logger.info(f"Fetching {ticker} from Yahoo Finance ({start} to {end})")
+        logger.info(f"Descargando {ticker} desde Yahoo Finance ({start} a {end})")
 
         data = yf.download(ticker, start=start, end=end, interval="1d", progress=False)
 
         if data.empty:
-            raise ValueError(f"No data returned for {ticker}")
+            raise ValueError(f"Sin datos retornados para {ticker}")
 
         # yfinance >=1.2.0 returns MultiIndex columns (Price, Ticker)
         # Flatten to a simple Series
@@ -46,13 +46,13 @@ def fetch_fx_direct(ticker: str, start: str, end: str) -> DataResult:
         series = series.dropna()
 
         if series.empty:
-            raise ValueError(f"No valid data after resampling for {ticker}")
+            raise ValueError(f"Sin datos válidos tras resample para {ticker}")
 
         # Normalize timezone if needed
         if series.index.tz is not None:
             series.index = series.index.tz_localize(None)
 
-        logger.info(f"Successfully fetched {ticker}: {len(series)} monthly observations")
+        logger.info(f"Descarga exitosa {ticker}: {len(series)} observaciones mensuales")
 
         return DataResult(
             data=series,
@@ -66,7 +66,7 @@ def fetch_fx_direct(ticker: str, start: str, end: str) -> DataResult:
         )
 
     except Exception as e:
-        logger.error(f"Error fetching {ticker} from Yahoo: {e}")
+        logger.error(f"Error descargando {ticker} desde Yahoo: {e}")
         return DataResult(
             data=None,
             source="yahoo",
@@ -88,14 +88,14 @@ def fetch_fx_cross(ticker_pair: tuple, start: str, end: str) -> DataResult:
     try:
         ticker_mon_usd, ticker_usd_clp = ticker_pair
 
-        logger.info(f"Fetching cross-rate {ticker_mon_usd} x {ticker_usd_clp}")
+        logger.info(f"Descargando cross-rate {ticker_mon_usd} x {ticker_usd_clp}")
 
         # Fetch both
         result_mon_usd = fetch_fx_direct(ticker_mon_usd, start, end)
         result_usd_clp = fetch_fx_direct(ticker_usd_clp, start, end)
 
         if not result_mon_usd.success or not result_usd_clp.success:
-            raise ValueError("Could not fetch one or both components of cross-rate")
+            raise ValueError("No se pudo obtener uno o ambos componentes del cross-rate")
 
         # Align on intersection of dates
         series_mon_usd = result_mon_usd.data
@@ -104,7 +104,7 @@ def fetch_fx_cross(ticker_pair: tuple, start: str, end: str) -> DataResult:
         common_dates = series_mon_usd.index.intersection(series_usd_clp.index)
 
         if len(common_dates) == 0:
-            raise ValueError("No common dates between cross-rate components")
+            raise ValueError("Sin fechas comunes entre componentes del cross-rate")
 
         series_mon_usd = series_mon_usd.loc[common_dates]
         series_usd_clp = series_usd_clp.loc[common_dates]
@@ -116,16 +116,16 @@ def fetch_fx_cross(ticker_pair: tuple, start: str, end: str) -> DataResult:
         median_value = series.median()
         if median_value <= 0:
             logger.warning(
-                f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} has negative or zero values (median={median_value:.4f})"
+                f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} tiene valores negativos o cero (mediana={median_value:.4f})"
             )
         if median_value > 1_000_000:
             logger.warning(
-                f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} seems extremely high (median={median_value:.2f})"
+                f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} parece extremadamente alto (mediana={median_value:.2f})"
             )
         if series.isna().sum() > len(series) * 0.2:
-            logger.warning(f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} has >20% NaN values")
+            logger.warning(f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} tiene >20% valores NaN")
 
-        logger.info(f"Successfully computed cross-rate {ticker_mon_usd}/{ticker_usd_clp}: {len(series)} observations")
+        logger.info(f"Cross-rate {ticker_mon_usd}/{ticker_usd_clp} calculado exitosamente: {len(series)} observaciones")
 
         return DataResult(
             data=series,
@@ -139,7 +139,7 @@ def fetch_fx_cross(ticker_pair: tuple, start: str, end: str) -> DataResult:
         )
 
     except Exception as e:
-        logger.error(f"Error computing cross-rate {ticker_pair}: {e}")
+        logger.error(f"Error calculando cross-rate {ticker_pair}: {e}")
         return DataResult(
             data=None,
             source="yahoo",
@@ -200,5 +200,5 @@ def fetch_fx(country_code: str, fx_ticker_direct: str, fx_ticker_cross: tuple, s
         coverage=("", ""),
         obs_count=0,
         success=False,
-        error_message="No valid FX ticker (direct or cross) configured",
+        error_message="Sin ticker FX válido (directo o cross) configurado",
     )

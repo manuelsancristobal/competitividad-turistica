@@ -33,11 +33,11 @@ def rolling_volatility(tcrb_index: pd.Series, window: int = 12, annualized: bool
     # Annualize volatility if requested (multiply by sqrt(12) for 12-month window)
     if annualized:
         rolling_std = rolling_std * np.sqrt(12)
-        annualization_note = " (annualized by sqrt(12))"
+        annualization_note = " (anualizada por sqrt(12))"
     else:
-        annualization_note = " (monthly)"
+        annualization_note = " (mensual)"
 
-    logger.info(f"Rolling volatility ({window}M){annualization_note} calculated")
+    logger.info(f"Volatilidad rolling ({window}M){annualization_note} calculada")
 
     return rolling_std
 
@@ -62,6 +62,6 @@ def volatility_regime(vol_series: pd.Series) -> pd.Series:
     regime[(vol_series > p33) & (vol_series <= p67)] = "media"
     regime[vol_series > p67] = "alta"
 
-    logger.info(f"Volatility regimes assigned (low: <={p33:.2f}%, medium: {p33:.2f}-{p67:.2f}%, high: >{p67:.2f}%)")
+    logger.info(f"Regímenes de volatilidad asignados (baja: <={p33:.2f}%, media: {p33:.2f}-{p67:.2f}%, alta: >{p67:.2f}%)")
 
     return regime

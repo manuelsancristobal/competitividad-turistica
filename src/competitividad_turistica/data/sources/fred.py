@@ -81,7 +81,7 @@ def fetch_ipc_fred(series_list: list, start: str, end: str, country: str = "n/a"
     try:
         for series_id in series_list:
             try:
-                logger.info(f"Attempting FRED {series_id} ({start} to {end})")
+                logger.info(f"Intentando FRED {series_id} ({start} a {end})")
 
                 # Retry logic
                 for attempt in range(MAX_REINTENTOS):
@@ -90,7 +90,7 @@ def fetch_ipc_fred(series_list: list, start: str, end: str, country: str = "n/a"
                         data = pd.read_csv(url, index_col=0, parse_dates=True)
 
                         if data.empty:
-                            raise ValueError("Empty data returned")
+                            raise ValueError("Datos vacíos retornados")
 
                         # FRED CSV usa el series_id como nombre de columna (usualmente en mayúsculas)
                         col_name = next((c for c in data.columns if c.upper() == series_id.upper()), data.columns[0])
@@ -98,7 +98,7 @@ def fetch_ipc_fred(series_list: list, start: str, end: str, country: str = "n/a"
 
                         if _is_inflation_rate_series(series_id):
                             # Convert annual inflation rate to CPI index
-                            logger.info(f"Converting inflation rate {series_id} to CPI index")
+                            logger.info(f"Convirtiendo tasa de inflación {series_id} a índice IPC")
                             series = _inflation_rate_to_cpi_index(series)
                             # Resample to monthly
                             series = series.resample("MS").first()
@@ -108,15 +108,15 @@ def fetch_ipc_fred(series_list: list, start: str, end: str, country: str = "n/a"
 
                         # Interpolate gaps (e.g. from annual to monthly)
                         if series.isna().any():
-                            logger.info(f"Interpolating gaps in FRED series {series_id}")
+                            logger.info(f"Interpolando gaps en serie FRED {series_id}")
                             series = series.interpolate(method="linear")
 
                         series = series.dropna()
 
                         if len(series) < 12:
-                            raise ValueError(f"Insufficient data: {len(series)} observations")
+                            raise ValueError(f"Datos insuficientes: {len(series)} observaciones")
 
-                        logger.info(f"Successfully fetched FRED {series_id}: {len(series)} observations")
+                        logger.info(f"Descarga exitosa FRED {series_id}: {len(series)} observaciones")
 
                         # --- Save to cache ---
                         save_to_cache(key, series, {"source": "fred", "series_id": series_id})
@@ -134,20 +134,20 @@ def fetch_ipc_fred(series_list: list, start: str, end: str, country: str = "n/a"
 
                     except Exception as e:
                         if attempt < MAX_REINTENTOS - 1:
-                            logger.debug(f"FRED {series_id} attempt {attempt + 1} failed, retrying: {e}")
+                            logger.debug(f"FRED {series_id} intento {attempt + 1} falló, reintentando: {e}")
                             time.sleep(PAUSA_REINTENTO)
                         else:
-                            logger.warning(f"FRED {series_id} failed after {MAX_REINTENTOS} attempts: {e}")
+                            logger.warning(f"FRED {series_id} falló tras {MAX_REINTENTOS} intentos: {e}")
 
             except Exception as e:
-                logger.debug(f"FRED {series_id} skipped: {e}")
+                logger.debug(f"FRED {series_id} omitido: {e}")
                 continue
 
         # All series failed
-        raise ValueError(f"All {len(series_list)} FRED series failed")
+        raise ValueError(f"Todas las {len(series_list)} series FRED fallaron")
 
     except Exception as e:
-        logger.error(f"Error fetching IPC from FRED for {country}: {e}")
+        logger.error(f"Error descargando IPC desde FRED para {country}: {e}")
         return DataResult(
             data=None,
             source="fred",
