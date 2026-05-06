@@ -62,6 +62,8 @@ def volatility_regime(vol_series: pd.Series) -> pd.Series:
     regime[(vol_series > p33) & (vol_series <= p67)] = "media"
     regime[vol_series > p67] = "alta"
 
-    logger.info(f"Regímenes de volatilidad asignados (baja: <={p33:.2f}%, media: {p33:.2f}-{p67:.2f}%, alta: >{p67:.2f}%)")
+    logger.info(
+        f"Regímenes de volatilidad asignados (baja: <={p33:.2f}%, media: {p33:.2f}-{p67:.2f}%, alta: >{p67:.2f}%)"
+    )
 
     return regime

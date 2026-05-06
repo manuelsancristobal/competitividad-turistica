@@ -20,9 +20,7 @@ class TestCacheKey:
 
 class TestSaveAndLoad:
     def test_round_trip(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(
-            "competitividad_turistica.data.cache.CACHE_DIR", tmp_path
-        )
+        monkeypatch.setattr("competitividad_turistica.data.cache.CACHE_DIR", tmp_path)
         from competitividad_turistica.data.cache import load_from_cache, save_to_cache
 
         dates = pd.date_range("2020-01-01", periods=12, freq="MS")
@@ -37,9 +35,7 @@ class TestSaveAndLoad:
         assert meta["source"] == "test"
 
     def test_expired_cache(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(
-            "competitividad_turistica.data.cache.CACHE_DIR", tmp_path
-        )
+        monkeypatch.setattr("competitividad_turistica.data.cache.CACHE_DIR", tmp_path)
         from competitividad_turistica.data.cache import load_from_cache, save_to_cache
 
         dates = pd.date_range("2020-01-01", periods=5, freq="MS")
@@ -57,9 +53,7 @@ class TestSaveAndLoad:
         assert loaded is None
 
     def test_missing_cache(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(
-            "competitividad_turistica.data.cache.CACHE_DIR", tmp_path
-        )
+        monkeypatch.setattr("competitividad_turistica.data.cache.CACHE_DIR", tmp_path)
         from competitividad_turistica.data.cache import load_from_cache
 
         loaded, meta = load_from_cache("nonexistent_key")
@@ -69,18 +63,14 @@ class TestSaveAndLoad:
 
 class TestCacheStatus:
     def test_empty_dir(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(
-            "competitividad_turistica.data.cache.CACHE_DIR", tmp_path
-        )
+        monkeypatch.setattr("competitividad_turistica.data.cache.CACHE_DIR", tmp_path)
         from competitividad_turistica.data.cache import cache_status
 
         status = cache_status()
         assert status["cached_files"] == 0
 
     def test_with_files(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(
-            "competitividad_turistica.data.cache.CACHE_DIR", tmp_path
-        )
+        monkeypatch.setattr("competitividad_turistica.data.cache.CACHE_DIR", tmp_path)
         (tmp_path / "a.csv").write_text("x")
         (tmp_path / "b.csv").write_text("y")
 
