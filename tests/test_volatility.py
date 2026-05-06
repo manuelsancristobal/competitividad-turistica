@@ -41,7 +41,7 @@ class TestVolatilityRegime:
     def test_returns_string_series(self, sample_tcrb_series):
         vol = rolling_volatility(sample_tcrb_series, window=12)
         regime = volatility_regime(vol)
-        assert regime.dtype == object
+        assert pd.api.types.is_string_dtype(regime)
 
     def test_valid_labels(self, sample_tcrb_series):
         vol = rolling_volatility(sample_tcrb_series, window=12)
